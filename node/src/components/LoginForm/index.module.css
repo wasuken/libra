@@ -1,0 +1,44 @@
+/* LoginForm.module.css */
+.formContainer {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f0f8ff; /* 明るい青色 */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formTitle {
+    text-align: center;
+    color: #007bff;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: block;
+    text-align: center;
+}
+
+.input {
+    display: block;
+    width: 80%;
+    margin: 10px auto; /* 真ん中に配置 */
+    padding: 0.375rem 0.75rem; /* reactstrapのInputと同じパディングを使用 */
+    border: 1px solid #ced4da; /* reactstrapのInputと同じボーダーを使用 */
+    border-radius: 0.25rem; /* reactstrapのInputと同じボーダーラジウスを使用 */
+}
+
+.submitButton {
+    display: block;
+    width: 50%;
+    margin: 20px auto; /* 真ん中に配置 */
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
