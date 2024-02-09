@@ -1,26 +1,29 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import LoginForm from "./components/LoginForm";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import { AuthContext } from "./AuthContext";
+import ProtectedRoute from "./ProtectedRoute";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Login from "./pages/Login";
+import useAuth from "@/useAuth";
 
 function App() {
-  const requestLogin = async (email: string, password: string) => {
-    const res = await axios.post(`/api/login`, {
-      email,
-      password,
-    });
-    console.log(res);
-  };
+  const { logout } = useAuth();
   return (
-    <>
-      <head>
-        <title>app</title>
-      </head>
-      <body>
-        <h2>test</h2>
-        <LoginForm handleParamSubmit={requestLogin} />
-      </body>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <div>test</div>
+              <button onClick={logout}>logout</button>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 
