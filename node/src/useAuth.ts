@@ -11,7 +11,7 @@ const useAuth = () => {
         email,
         password,
       });
-      setToken(response.data.data.token);
+      setToken(response.data.access_token);
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -26,12 +26,11 @@ const useAuth = () => {
     if (!token) {
       return true;
     }
-    console.log(token);
     const payload = JSON.parse(atob(token.split(".")[1]));
-    const iat = payload.iat;
+    const exp = payload.exp;
     const currentTime = Math.floor(Date.now() / 1000);
 
-    return currentTime > iat;
+    return currentTime > exp;
   };
 
   const isLogin = !isTokenExpired(token);

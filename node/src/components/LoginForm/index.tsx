@@ -25,7 +25,7 @@ const LoginForm: React.FC = ({ handleParamSubmit }: IProps) => {
   });
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-    console.log(data);
+    // console.log(data);
     const { email, password } = data;
     await handleParamSubmit(email, password);
   };

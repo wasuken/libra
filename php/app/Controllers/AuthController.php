@@ -8,8 +8,77 @@ use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\Shield\Models\UserModel;
 use CodeIgniter\Shield\Entities\User;
 
+use CodeIgniter\Shield\Authentication\Authenticators\Session;
+use CodeIgniter\Shield\Authentication\JWTManager;
+use CodeIgniter\Shield\Validation\ValidationRules;
+
 class AuthController extends ResourceController
 {
+  public function jwtLogin(): ResponseInterface
+  {
+    try{
+      // Get the validation rules
+      $rules = $this->getValidationRules();
+
+      // Validate credentials
+      if (! $this->validateData($this->request->getJSON(true), $rules, [], config('Auth')->DBGroup)) {
+        return $this->fail(
+          ['errors' => $this->validator->getErrors()],
+          $this->codes['unauthorized']
+        );
+      }
+
+      // Get the credentials for login
+      $credentials             = $this->request->getJsonVar(setting('Auth.validFields'));
+      $credentials             = array_filter($credentials);
+      $credentials['password'] = $this->request->getJsonVar('password');
+
+      /** @var Session $authenticator */
+      $authenticator = auth('session')->getAuthenticator();
+
+      // Check the credentials
+      $result = $authenticator->check($credentials);
+
+      // Credentials mismatch.
+      if (!$result->isOK()) {
+        return $this->failUnauthorized($result->reason());
+      }
+
+      $user = $result->extraInfo();
+      $payload = [
+        'email' => $user->email,
+        'id' => $user->id,
+      ];
+
+      /** @var JWTManager $manager */
+      $manager = service('jwtmanager');
+
+      $jwt = $manager->issue($payload, (3 * 60 * 60 * 24));
+
+      return $this->respond([
+        'access_token' => $jwt,
+      ]);
+    }catch(\Exception $e){
+      log_message('error', $e->getMessage());
+      return $this->fail(
+        ['server_error' => []],
+        [500],
+      );
+    }
+  }
+
+  /**
+   * Returns the rules that should be used for validation.
+   *
+   * @return array<string, array<string, array<string>|string>>
+   * @phpstan-return array<string, array<string, string|list<string>>>
+   */
+  protected function getValidationRules(): array
+  {
+    $rules = new ValidationRules();
+
+    return $rules->getLoginRules();
+  }
   public function register()
   {
     $rules = [
@@ -47,79 +116,6 @@ class AuthController extends ResourceController
     }
 
     return $this->respond($response, $status);
-  }
-  public function login()
-  {
-
-    if(auth()->loggedIn()){
-      auth()->logout();
-    }
-    $status = 200;
-
-    $rules = [
-      "email" => "required|valid_email",
-      "password" => "required"
-    ];
-
-    if (!$this->validate($rules)) {
-      $status = 400;
-      $response = [
-        "message" => $this->validator->getErrors(),
-        "data" => []
-      ];
-    } else {
-
-      // success
-      $credentials = [
-        "email" => $this->request->getVar("email"),
-        "password" => $this->request->getVar("password")
-      ];
-
-      $loginAttempt = auth()->attempt($credentials);
-
-      if (!$loginAttempt->isOK()) {
-
-        $response = [
-          "message" => "Invalid login details",
-          "data" => []
-        ];
-      } else {
-
-        // We have a valid data set
-        $userObject = new UserModel();
-
-        $userData = $userObject->findById(auth()->id());
-
-        $token = $userData->generateAccessToken(getenv("secretkey"));
-
-        $auth_token = $token->raw_token;
-
-        $response = [
-          "status" => true,
-          "message" => "User logged in successfully",
-          "data" => [
-            "token" => $auth_token
-          ]
-        ];
-      }
-    }
-
-    return $this->respond($response, $status);
-  }
-  public function profile()
-  {
-    $userId = auth()->id();
-
-    $userObject = new UserModel();
-
-    $userData = $userObject->findById($userId);
-
-    return $this->respond([
-      "message" => "Profile information of logged in user",
-      "data" => [
-        "user" => $userData
-      ]
-    ], 200);
   }
   public function logout()
   {

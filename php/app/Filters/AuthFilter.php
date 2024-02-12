@@ -25,11 +25,6 @@ class AuthFilter implements FilterInterface
    */
   public function before(RequestInterface $request, $arguments = null)
   {
-    helper("auth");
-
-    if (!auth("tokens")->loggedIn()) {
-      return redirect()->to(base_url("api/invalid-access"));
-    }
   }
 
   /**
