@@ -117,17 +117,6 @@ class AuthController extends ResourceController
 
     return $this->respond($response, $status);
   }
-  public function logout()
-  {
-    auth()->logout();
-
-    auth()->user()->revokeAllAccessTokens();
-
-    return $this->respond([
-      "message" => "User logged out successfully",
-      "data" => []
-    ], 200);
-  }
   public function accessDenied()
   {
     return $this->respond([
