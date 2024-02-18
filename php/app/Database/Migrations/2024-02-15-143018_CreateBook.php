@@ -9,7 +9,7 @@ class CreateBook extends Migration
   public function up()
   {
     //
-    $this->forge->adField([
+    $this->forge->addField([
       'id' => [
         'type' => 'INT',
         'constraint' => 5,
@@ -33,7 +33,7 @@ class CreateBook extends Migration
         'constraint' => '200',
       ],
       'publication_date' => [
-        'type' => 'date',
+        'type' => 'datetime',
       ],
     ]);
     $this->forge->addKey('id', true);
