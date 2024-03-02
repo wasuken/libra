@@ -16,10 +16,12 @@ export const Default = Template.bind({});
 Default.args = {
   children: "Click Me",
   onClick: () => alert("Button clicked!"),
+  isSimple: false,
 };
 
 export const WithCustomText = Template.bind({});
 WithCustomText.args = {
   ...Default.args,
-  children: "Custom Text Here",
+  children: "simple text",
+  isSimple: true,
 };

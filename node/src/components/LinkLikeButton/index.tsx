@@ -5,14 +5,21 @@ import styles from "./index.module.css";
 interface LinkLikeButtonProps {
   onClick: () => void;
   children: React.ReactNode;
+  isSimple: boolean;
 }
 
 const LinkLikeButton: React.FC<LinkLikeButtonProps> = ({
   onClick,
   children,
+  isSimple,
 }) => {
   return (
-    <button className={styles.linkLikeButton} onClick={onClick}>
+    <button
+      className={
+        isSimple == true ? styles.linkLikeSimpleButton : styles.linkLikeButton
+      }
+      onClick={onClick}
+    >
       {children}
     </button>
   );

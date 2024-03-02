@@ -1,13 +1,22 @@
 .linkLikeButton {
-  background-color: transparent;
-  border: none;
-  color: blue;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 8px 16px;
-  font-size: 16px;
+    background-color: transparent;
+    border: none;
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 8px 16px;
+    font-size: 16px;
 }
 
-.linkLikeButton:hover {
-  opacity: 0.8;
+.linkLikeSimpleButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+.linkLikeButton:hover, .linkLikeSimpleButton:hover {
+    opacity: 0.8;
 }

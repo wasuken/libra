@@ -17,7 +17,15 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <div>test</div>
+              <div>
+                <a href="/">本をかりる</a>
+              </div>
+              <div>
+                <a href="/">本をかえす</a>
+              </div>
+              <div>
+                <a href="/">本一覧をみる</a>
+              </div>
               <button onClick={logout}>logout</button>
             </ProtectedRoute>
           }
