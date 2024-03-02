@@ -1,0 +1,35 @@
+// BookList/index.stories.tsx
+import React from "react";
+import { Story, Meta } from "@storybook/react/types-6-0";
+import BookList, { BookListProps } from "./index";
+
+export default {
+  title: "Organizing/BookList",
+  component: BookList,
+} as Meta;
+
+const Template: Story<BookListProps> = (args) => <BookList {...args} />;
+
+function genBooks(n: number) {
+  const books = [];
+  for (let i = 1; i <= n; i++) {
+    books.push({
+      id: i,
+      title: `Book Title ${i}`,
+      isbn: `123-4567890123`,
+      publisher: `Publisher ${i}`,
+      stock: 2,
+      thumbnail_url: `https://via.placeholder.com/100x150`,
+      publication_date: new Date(`2020-01-01`),
+    });
+  }
+  return books;
+}
+
+export const Default = Template.bind({});
+Default.args = {
+  books: genBooks(30),
+  onItemClick: (b) => {
+    alert(b.title);
+  },
+};

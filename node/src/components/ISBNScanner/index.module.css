@@ -1,0 +1,6 @@
+/* ISBNScanner/index.module.css */
+.scanner {
+  width: 100%; /* コンテナの幅に合わせる */
+  height: 480px; /* 高さを指定 */
+  margin: auto; /* 中央揃え */
+}
