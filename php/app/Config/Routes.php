@@ -14,6 +14,7 @@ $routes->group("api", ["namespace" => "App\Controllers"], static function ($rout
   $routes->post('login', 'AuthController::jwtLogin');
 
   $routes->get('books', 'Auth\BooksController::index', ['filter' => 'jwt']);
+  $routes->post('book', 'Auth\BooksController::create', ['filter' => 'jwt']);
   $routes->post('book/rental/(:segment)', 'Auth\UserBooksController::rental/$1', ['filter' => 'jwt']);
   $routes->post('book/return/(:segment)', 'Auth\UserBooksController::return/$1', ['filter' => 'jwt']);
 
