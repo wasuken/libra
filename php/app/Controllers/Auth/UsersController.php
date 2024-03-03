@@ -4,8 +4,9 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\RESTful\ResourceController;
 
-class UserController extends BaseController
+class UsersController extends ResourceController
 {
   public function logout()
   {

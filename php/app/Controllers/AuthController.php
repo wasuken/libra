@@ -48,6 +48,7 @@ class AuthController extends ResourceController
       $payload = [
         'email' => $user->email,
         'id' => $user->id,
+        'sub' => $user->id,
       ];
 
       /** @var JWTManager $manager */

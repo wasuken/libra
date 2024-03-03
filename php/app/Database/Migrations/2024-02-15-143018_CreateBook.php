@@ -28,6 +28,14 @@ class CreateBook extends Migration
         'type' => 'varchar',
         'constraint' => '13',
       ],
+      'thumbnail_url' => [
+        'type' => 'varchar',
+        'constraint' => '4096',
+      ],
+      'stock' => [
+        'type' => 'INT',
+        'default' => 1,
+      ],
       'publisher' => [
         'type' => 'varchar',
         'constraint' => '200',
