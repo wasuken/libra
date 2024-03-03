@@ -29,6 +29,6 @@ class UserBooksController extends ResourceController
     return $this->respond([
       "message" => "not implement",
       "data" => []
-    ], 500);
+    ], 200);
   }
 }
