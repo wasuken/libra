@@ -14,7 +14,11 @@ const BookListItem: React.FC<BookListItemProps> = ({ book, onClick }) => {
     <LinkLikeButton isSimple={true} onClick={onClick}>
       <div className={styles.item}>
         <img
-          src={book.thumbnail_url}
+          src={
+            book.thumbnail_url.length <= 0
+              ? "/no_image.png"
+              : book.thumbnail_url.length
+          }
           alt={book.title}
           className={styles.thumbnail}
         />
@@ -24,7 +28,8 @@ const BookListItem: React.FC<BookListItemProps> = ({ book, onClick }) => {
           <p className={styles.publisher}>Publisher: {book.publisher}</p>
           <p className={styles.stock}>Stock: {book.stock}</p>
           <p className={styles.date}>
-            Published: {book.publication_date.toISOString().split("T")[0]}
+            Published:{" "}
+            {new Date(book.publication_date).toISOString().split("T")[0]}
           </p>
         </div>
       </div>

@@ -16,6 +16,20 @@ const useAuth = () => {
       console.error("Login failed:", error);
     }
   };
+  const genAfetch = (tk) => {
+    console.log(tk);
+    return (url, params = {}) => {
+      let eParams = { ...params };
+      if (!eParams.headers) {
+        eParams.headers = {};
+      }
+      if (!eParams.headers.Authorization) {
+        eParams.headers.Authorization = `Bearer ${tk}`;
+      }
+      console.log("debug", eParams);
+      return fetch(url, eParams);
+    };
+  };
 
   const logout = () => {
     setToken("");
@@ -35,7 +49,14 @@ const useAuth = () => {
 
   const isLogin = !isTokenExpired(token);
 
-  return { token, login, logout, isTokenExpired, isLogin };
+  return {
+    token,
+    login,
+    logout,
+    isTokenExpired,
+    isLogin,
+    afetch: genAfetch(token),
+  };
 };
 
 export default useAuth;

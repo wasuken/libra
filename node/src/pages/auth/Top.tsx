@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BookInfoModal from "@/components/BookInfoModal";
 import BookList from "@/components/BookList";
 import { Book } from "@/const";
@@ -7,10 +7,18 @@ import styles from "./Top.module.css"; // CSS Moduleのインポート
 
 // 仮の書籍データ
 const Top: React.FC<TopProps> = () => {
-  const { logout } = useAuth();
+  const { logout, afetch } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const fetchBooks = async () => {
+    const res = await afetch(`/api/books`);
+    console.log(res);
+    if (res.ok) {
+      const resData = await res.json();
+      setBooks(resData);
+    }
+  };
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -18,7 +26,9 @@ const Top: React.FC<TopProps> = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  // setBooks([]);
+  useEffect(() => {
+    fetchBooks().then(() => console.log("fetch books."));
+  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
