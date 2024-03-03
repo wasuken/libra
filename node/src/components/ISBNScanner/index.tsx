@@ -35,25 +35,12 @@ const ISBNScanner: React.FC<ISBNScannerProps> = ({ onISBNDetected }) => {
             console.error(err);
             setIsScanning(false);
             return;
+          } else {
+            Quagga.start();
           }
-          Quagga.start();
         },
       );
 
-      Quagga.onProcessed((result) => {
-        //alert(result);
-        if (result == null) return; // 未検出の場合
-        if (typeof result != "object") return;
-        // alert(result.boxes);
-        if (result.boxes == undefined) return;
-        const ctx = Quagga.canvas.ctx.overlay;
-        const canvas = Quagga.canvas.dom.overlay;
-        ctx.clearRect(0, 0, parseInt(canvas.width), parseInt(canvas.height));
-        Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, ctx, {
-          color: "blue",
-          lineWidth: 5,
-        }); // 結果を描画
-      });
       Quagga.onDetected((data) => {
         const code = data.codeResult.code;
         onISBNDetected(code);
@@ -82,7 +69,7 @@ const ISBNScanner: React.FC<ISBNScannerProps> = ({ onISBNDetected }) => {
       {isScanning ? (
         <div>
           <button className={styles.scanButton} onClick={cancelScanning}>
-            Cancel
+            Cancel Scanning
           </button>
           <div ref={scannerRef} className={styles.scanner} />
         </div>

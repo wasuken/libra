@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import axios from "axios";
+import { Book } from "./const";
 
 const useAuth = () => {
   const { token, setToken } = useContext(AuthContext);
@@ -17,7 +18,6 @@ const useAuth = () => {
     }
   };
   const genAfetch = (tk) => {
-    console.log(tk);
     return (url, params = {}) => {
       let eParams = { ...params };
       if (!eParams.headers) {
@@ -25,6 +25,7 @@ const useAuth = () => {
       }
       if (!eParams.headers.Authorization) {
         eParams.headers.Authorization = `Bearer ${tk}`;
+        eParams.headers["Content-Type"] = "application/json";
       }
       console.log("debug", eParams);
       return fetch(url, eParams);

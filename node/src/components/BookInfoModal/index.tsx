@@ -8,9 +8,14 @@ import { Book } from "@/const";
 interface BookInfoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: () => Promise<void>;
 }
 
-const BookInfoModal: React.FC<BookInfoModalProps> = ({ isOpen, onClose }) => {
+const BookInfoModal: React.FC<BookInfoModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+}) => {
   const [bookData, setBookData] = useState<Book>({
     isbn: "",
     title: "",
@@ -27,12 +32,10 @@ const BookInfoModal: React.FC<BookInfoModalProps> = ({ isOpen, onClose }) => {
       if (res.ok) {
         const resData = await res.json();
 
-        const {
-          title,
-          publisher,
-          pubdate: publicationDate,
-          author,
-        } = resData[0].summary;
+        const { title, publisher, pubdate, author } = resData[0].summary;
+        const year = pubdate.substring(0, 4);
+        const month = pubdate.substring(4, 6);
+        const publicationDate = `${year}-${month}-01`;
         const inputBookData = {
           isbn,
           title,
@@ -51,16 +54,8 @@ const BookInfoModal: React.FC<BookInfoModalProps> = ({ isOpen, onClose }) => {
   };
 
   const handleFormSubmit = async (updatedBookData: Book) => {
-    console.log("Updated Book Data:", updatedBookData);
-    // フォームのデータを送信する処理（APIへのPOSTリクエストなど）
-    const res = await fetch(`/api/book`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(book),
-    });
-    onClose(); // モーダルを閉じる
+    onSubmit(updatedBookData);
+    onClose();
   };
 
   return (

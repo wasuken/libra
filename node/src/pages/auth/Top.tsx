@@ -13,10 +13,20 @@ const Top: React.FC<TopProps> = () => {
 
   const fetchBooks = async () => {
     const res = await afetch(`/api/books`);
-    console.log(res);
     if (res.ok) {
       const resData = await res.json();
       setBooks(resData);
+    }
+  };
+  const postBook = async (book: Book) => {
+    const res = await afetch(`/api/book`, {
+      method: "POST",
+      body: JSON.stringify(book),
+    });
+    if (res.ok) {
+      alert("登録完了");
+      // 再取得
+      await fetchBooks();
     }
   };
   const handleOpenModal = () => {
@@ -46,7 +56,11 @@ const Top: React.FC<TopProps> = () => {
         <button onClick={handleOpenModal} className={styles.registerButton}>
           本を登録する
         </button>
-        <BookInfoModal isOpen={isModalOpen} onClose={handleCloseModal} />
+        <BookInfoModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={postBook}
+        />
       </div>
     </div>
   );

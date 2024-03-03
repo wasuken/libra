@@ -9,7 +9,14 @@ interface BookFormProps {
 }
 
 const BookForm: React.FC<BookFormProps> = ({ initialBookData, onSubmit }) => {
-  const [bookData, setBookData] = useState<Book>(initialBookData);
+  const formatDate = (date: string) => {
+    if (date.length <= 0) return "";
+    return new Date(date).toISOString().split("T")[0];
+  };
+  const [bookData, setBookData] = useState<Book>({
+    ...initialBookData,
+    publicationDate: formatDate(initialBookData.publicationDate),
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,7 +33,7 @@ const BookForm: React.FC<BookFormProps> = ({ initialBookData, onSubmit }) => {
   }, [initialBookData]);
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form}>
       <div className={styles.field}>
         <label htmlFor="isbn">ISBN:</label>
         <input
@@ -62,8 +69,8 @@ const BookForm: React.FC<BookFormProps> = ({ initialBookData, onSubmit }) => {
         <input
           id="publicationDate"
           name="publicationDate"
-          type="text"
-          value={bookData.publicationDate}
+          type="date"
+          value={formatDate(bookData.publicationDate)}
           onChange={handleChange}
         />
       </div>
@@ -87,7 +94,11 @@ const BookForm: React.FC<BookFormProps> = ({ initialBookData, onSubmit }) => {
           onChange={handleChange}
         />
       </div>
-      <button type="submit" className={styles.submitButton}>
+      <button
+        type="button"
+        className={styles.submitButton}
+        onClick={handleSubmit}
+      >
         Submit
       </button>
     </form>

@@ -14,9 +14,9 @@ export const Default = Template.bind({});
 Default.args = {
   book: {
     id: 1,
-    title: "Example Book Title",
+    title: "Example Book Titldksafdajfkjkdasfjkladsjfkadskfjkdlase",
     isbn: "123-4567890123",
-    publisher: "Example Publisher",
+    publisher: "Example Publisherlkdajflkajd;fjdasjfadsjfjadskljl",
     stock: 3,
     thumbnail_url: "https://via.placeholder.com/100x150",
     publication_date: new Date("2020-01-01"),

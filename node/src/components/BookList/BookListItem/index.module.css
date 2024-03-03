@@ -1,29 +1,34 @@
 /* BookListItem/index.module.css */
 .item {
-  display: flex;
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  align-items: center;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    align-items: center;
 }
 
 .thumbnail {
-  width: 100px;
-  height: auto;
-  margin-right: 20px;
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
 }
 
 .details {
-  flex-grow: 1;
+    flex-grow: 1;
+    width: 100px;
+    height: 190px;
 }
 
 .title {
-  font-size: 18px;
-  margin: 0 0 5px 0;
+    font-size: 18px;
+    height: 40px;
+    margin: 0 0 5px 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .isbn, .publisher, .stock, .date {
-  font-size: 14px;
-  margin: 0;
-  color: #666;
+    font-size: 14px;
+    margin: 0;
+    color: #666;
 }
