@@ -1,0 +1,3 @@
+ssl/
+conf/*
+!conf/*.template
