@@ -1,32 +1,6 @@
-# libra API
+# setup
 
-# nologin user
-
-- ログイン
-
-# user
-
-- ログアウト
-- ログインユーザー情報更新
-
-# user books
-
-- 本のレンタル
-- 本の返却
-- 本一覧
-
-# admin
-
-- ユーザー情報
-- ユーザー一覧
-- ユーザー削除
-- ユーザー更新
-- ユーザー登録
-- ユーザー
-  - 本レンタル
-  - 本の返却
-  - 情報更新
-- 本
-  - 削除
-  - 更新
-  - 登録
+```bash
+php spark shield:setup
+php spark migrate
+```
