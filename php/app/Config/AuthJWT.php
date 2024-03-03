@@ -14,6 +14,6 @@ use CodeIgniter\Shield\Config\AuthJWT as ShieldAuthJWT;
 class AuthJWT extends ShieldAuthJWT
 {
   public array $defaultClaims = [
-    'iss' => 'http://localhost:3003/'
+    'iss' => 'https://archoox.archmint.local:10433/'
   ];
 }

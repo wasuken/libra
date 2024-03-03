@@ -9,6 +9,8 @@ use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
 
+use CodeIgniter\Shield\Authentication\Authenticators\JWT;
+
 class Filters extends BaseConfig
 {
   /**
@@ -25,6 +27,7 @@ class Filters extends BaseConfig
     'invalidchars'  => InvalidChars::class,
     'secureheaders' => SecureHeaders::class,
     'apiauth'       => \App\Filters\AuthFilter::class,
+    'jwt'     => JWT::class,
   ];
 
   /**
