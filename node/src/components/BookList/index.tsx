@@ -2,16 +2,7 @@
 import React from "react";
 import BookListItem from "./BookListItem";
 import styles from "./index.module.css";
-
-type Book = {
-  id: number;
-  title: string;
-  isbn: string;
-  publisher: string;
-  stock: number;
-  thumbnail_url: string;
-  publication_date: Date;
-};
+import { Book } from "@/const";
 
 interface BookListProps {
   books: Book[];

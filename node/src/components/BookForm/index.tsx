@@ -1,15 +1,7 @@
 // BookForm/index.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./index.module.css";
-
-interface Book {
-  isbn: string;
-  title: string;
-  author: string;
-  publicationDate: string; // 日付の形式はプロジェクトによって異なる場合があります
-  publisher: string;
-  stock: number;
-}
+import { Book } from "@/const";
 
 interface BookFormProps {
   initialBookData: Book;
@@ -28,6 +20,10 @@ const BookForm: React.FC<BookFormProps> = ({ initialBookData, onSubmit }) => {
     e.preventDefault();
     onSubmit(bookData);
   };
+
+  useEffect(() => {
+    setBookData(initialBookData);
+  }, [initialBookData]);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>

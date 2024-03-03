@@ -1,6 +1,3 @@
-import React, { useState, useContext } from "react";
-import axios from "axios";
-import { AuthContext } from "@/AuthContext";
 import useAuth from "@/useAuth";
 import { Navigate } from "react-router-dom";
 import LoginForm from "@/components/LoginForm";

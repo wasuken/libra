@@ -1,6 +1,23 @@
-/* ISBNScanner/index.module.css */
+.container {
+    width: 100%;
+    overflow: scroll;
+    text-align: center;
+}
+
 .scanner {
-  width: 100%; /* コンテナの幅に合わせる */
-  height: 480px; /* 高さを指定 */
-  margin: auto; /* 中央揃え */
+    width: 100%; /* コンテナの幅に合わせる */
+    height: 300px;
+}
+
+.scanButton {
+    /* スキャンボタンのスタイル */
+    color: white;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    background-color: #007bff;
+    border-radius: 5px;
+}
+
+.scanButton:hover {
+    background-color: #0056b3;
 }

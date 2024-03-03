@@ -1,59 +1,91 @@
-// ISBNScanner/index.tsx
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Quagga from "quagga";
 import styles from "./index.module.css";
 
 interface ISBNScannerProps {
-  onISBNDetected: (isbn: string) => void;
+  onISBNDetected: (isbn: string) => Promise<void>;
 }
 
 const ISBNScanner: React.FC<ISBNScannerProps> = ({ onISBNDetected }) => {
-n  const [isScanning, setIsScanning] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
   const scannerRef = useRef<HTMLDivElement>(null);
 
-  const startScanning = () => {
-    if (!scannerRef.current) return;
-
-    setIsScanning(true); // スキャン中の状態を設定
-
-    Quagga.init(
-      {
-        inputStream: {
-          type: "LiveStream",
-          constraints: {
-            width: 640,
-            height: 480,
-            facingMode: "environment", // リアカメラを使用
+  useEffect(() => {
+    if (isScanning && scannerRef.current) {
+      Quagga.init(
+        {
+          inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            constraints: {
+              width: 640,
+              height: 480,
+              facingMode: "environment",
+            },
+            target: scannerRef.current,
           },
-          target: scannerRef.current, // スキャン対象の要素
+          decoder: {
+            readers: ["ean_reader"],
+          },
+          locate: true,
         },
-        decoder: {
-          readers: ["ean_reader"], // EAN（ヨーロッパ記事番号、ISBNにも使用される）バーコードを読み取る
+        (err) => {
+          // alert(err);
+          if (err) {
+            console.error(err);
+            setIsScanning(false);
+            return;
+          }
+          Quagga.start();
         },
-        locate: true, // バーコードの位置を描画する
-      },
-      (err) => {
-        if (err) {
-          console.error(err);
-          setIsScanning(false); // エラー時にスキャン中の状態を解除
-          return;
-        }
-        Quagga.start();
-      },
-    );
+      );
 
-    Quagga.onDetected((data) => {
-      const code = data.codeResult.code;
-      onISBNDetected(code);
-      Quagga.stop(); // バーコードを検出したらスキャンを停止
-      setIsScanning(false); // スキャンが完了したらスキャン中の状態を解除
-    });
+      Quagga.onProcessed((result) => {
+        //alert(result);
+        if (result == null) return; // 未検出の場合
+        if (typeof result != "object") return;
+        // alert(result.boxes);
+        if (result.boxes == undefined) return;
+        const ctx = Quagga.canvas.ctx.overlay;
+        const canvas = Quagga.canvas.dom.overlay;
+        ctx.clearRect(0, 0, parseInt(canvas.width), parseInt(canvas.height));
+        Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, ctx, {
+          color: "blue",
+          lineWidth: 5,
+        }); // 結果を描画
+      });
+      Quagga.onDetected((data) => {
+        const code = data.codeResult.code;
+        onISBNDetected(code);
+        Quagga.stop();
+        setIsScanning(false);
+      });
+    }
+
+    // Cleanup function
+    return () => {
+      if (isScanning) {
+        Quagga.stop();
+      }
+    };
+  }, [isScanning, onISBNDetected]);
+
+  const startScanning = () => {
+    setIsScanning(true);
+  };
+  const cancelScanning = () => {
+    setIsScanning(false);
   };
 
   return (
     <div className={styles.container}>
       {isScanning ? (
-        <div ref={scannerRef} className={styles.scanner} />
+        <div>
+          <button className={styles.scanButton} onClick={cancelScanning}>
+            Cancel
+          </button>
+          <div ref={scannerRef} className={styles.scanner} />
+        </div>
       ) : (
         <button className={styles.scanButton} onClick={startScanning}>
           Start Scanning

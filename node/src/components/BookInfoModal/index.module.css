@@ -1,32 +1,54 @@
-/* BookInfoModal/index.module.css */
 .modalOpen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .modalClosed {
-  display: none;
+    display: none;
+}
+
+.formContainer {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: scroll;
+    width: 80%;
 }
 
 .closeButton {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    padding: 5px 10px;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .closeButton:hover {
-  background-color: #c82333;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.closeButton:before {
+    content: "×";
+    color: black;
+    font-size: 2.2rem;
 }
