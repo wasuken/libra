@@ -41,14 +41,47 @@ class UserLendBook extends Model
   protected $afterFind      = [];
   protected $beforeDelete   = [];
   protected $afterDelete    = [];
+
+  // ユーザーが対象の本をレンタルしており、かつ返却している
+  private function isUserLending($user_id, $book_id)
+  {
+    $model = new UserLendBook();
+    $record = $model
+      ->where('user_id', $user_id)
+      ->where('book_id', $book_id)
+      ->where('return_date is null')
+      ->first();
+
+    return empty($record);
+  }
+  // すでに最大レンタル数に達しているか
+  private function isOverBorrowLimit($user_id)
+  {
+    $model = new UserLendBook();
+    $record = $model
+      ->select('count(*) as cnt')
+      ->where('user_id', $user_id)
+      ->where('return_date is null')
+      ->first();
+
+    $cnt = $record['cnt'];
+
+    // 4冊まで
+    return $cnt > 4;
+  }
+
   // ユーザーのレンタル処理
   public function userRentalBook($user_id, $book_id)
   {
     $rst = false;
     try {
       $this->db->transException(true)->transStart();
-      $umodel = new UserModel();
-      $bmodel = new BookModel();
+
+      if(!$this->isUserLending($user_id, $book_id)){
+        throw new DatabaseException('Already rental.');
+      }else if($this->isOverBorrowLimit($book_id)){
+        throw new DatabaseException('Rental Book num over borrow limit.');
+      }
 
       $rst = $this->insert([
         'book_id' => $book_id,
@@ -59,6 +92,7 @@ class UserLendBook extends Model
       ]);
 
       $this->db->transComplete();
+      $rst = true;
     } catch (DatabaseException $e) {
       $this->db->transRollback();
     }
@@ -69,8 +103,9 @@ class UserLendBook extends Model
     $rst = false;
     try {
       $this->db->transException(true)->transStart();
-      $umodel = new UserModel();
-      $bmodel = new BookModel();
+      if($this->isUserLending($user_id, $book_id)){
+        throw new DatabaseException('Not rental.');
+      }
 
       $this
         ->where('book_id', $book_id)
@@ -81,6 +116,7 @@ class UserLendBook extends Model
         ]);
 
       $this->db->transComplete();
+      $rst = true;
     } catch (DatabaseException $e) {
       $this->db->transRollback();
     }

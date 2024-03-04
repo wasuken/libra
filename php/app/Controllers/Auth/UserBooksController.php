@@ -15,10 +15,17 @@ class UserBooksController extends ResourceController
     $model = new UserLendBook();
     $user = auth()->user();
     $rst = $model->userReturnBook($user->id, $id);
+
+    $status = 200;
+    $msg = "success.";
+    if(!$rst){
+      $status = 400;
+      $msg = "failed return";
+    }
     return $this->respond([
-      "message" => "success",
+      "message" => $msg,
       "data" => []
-    ], 200);
+    ], $status);
   }
   // // 本のレンタル
   public function rental($id)
@@ -26,9 +33,16 @@ class UserBooksController extends ResourceController
     $model = new UserLendBook();
     $user = auth()->user();
     $rst = $model->userRentalBook($user->id, $id);
+
+    $status = 200;
+    $msg = "success.";
+    if(!$rst){
+      $status = 400;
+      $msg = "failed return";
+    }
     return $this->respond([
-      "message" => "not implement",
+      "message" => $msg,
       "data" => []
-    ], 200);
+    ], $status);
   }
 }
