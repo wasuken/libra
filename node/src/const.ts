@@ -7,3 +7,8 @@ export interface Book {
   publisher: string;
   stock: number;
 }
+
+export interface SelectButton {
+  text: string;
+  onClick: () => Promise<void>;
+}

@@ -8,7 +8,9 @@ const MAX_DISPLAY_LENGTH = 20;
 
 interface BookListItemProps {
   book: Book;
-  onClick: (book: Book) => void;
+  onClick: (book: Book) => Promise<void>;
+  onRentalClick: (book: Book) => Promise<void>;
+  onReturnClick: (book: Book) => Promise<void>;
 }
 
 const BookListItem: React.FC<BookListItemProps> = ({ book, onClick }) => {
@@ -36,6 +38,10 @@ const BookListItem: React.FC<BookListItemProps> = ({ book, onClick }) => {
           <p className={styles.date}>
             Published:{" "}
             {new Date(book.publication_date).toISOString().split("T")[0]}
+          </p>
+          <p className={styles.itemFooter}>
+            <button className={styles.simpleButton}>借りる</button>
+            <button className={styles.simpleButton}>返す</button>
           </p>
         </div>
       </div>

@@ -47,12 +47,7 @@ const Top: React.FC<TopProps> = () => {
           Logout
         </button>
       </div>
-      <div className={styles.bookListSection}>
-        <h2 className={styles.title}>本一覧</h2>
-        <BookList books={books} />
-      </div>
       <div className={styles.bookRegistrationSection}>
-        <h2 className={styles.title}>本登録</h2>
         <button onClick={handleOpenModal} className={styles.registerButton}>
           本を登録する
         </button>
@@ -61,6 +56,10 @@ const Top: React.FC<TopProps> = () => {
           onClose={handleCloseModal}
           onSubmit={postBook}
         />
+      </div>
+      <div className={styles.bookListSection}>
+        <h2 className={styles.title}>本一覧</h2>
+        <BookList books={books} />
       </div>
     </div>
   );
