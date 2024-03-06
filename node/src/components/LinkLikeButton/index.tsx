@@ -14,14 +14,14 @@ const LinkLikeButton: React.FC<LinkLikeButtonProps> = ({
   isSimple,
 }) => {
   return (
-    <button
+    <div
       className={
         isSimple == true ? styles.linkLikeSimpleButton : styles.linkLikeButton
       }
       onClick={onClick}
     >
       {children}
-    </button>
+    </div>
   );
 };
 
