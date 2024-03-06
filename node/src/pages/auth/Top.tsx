@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BookInfoModal from "@/components/BookInfoModal";
 import BookList from "@/components/BookList";
-import { Book } from "@/const";
+import { Book, RentalBook } from "@/const";
 import useAuth from "@/useAuth";
 import styles from "./Top.module.css"; // CSS Moduleのインポート
 
@@ -9,13 +9,75 @@ import styles from "./Top.module.css"; // CSS Moduleのインポート
 const Top: React.FC<TopProps> = () => {
   const { logout, afetch } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
+  const [rentalBooks, setRentalBooks] = useState<RentalBook[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const postRentalBook = async (book: Book) => {
+    const res = await afetch(`/api/book/rental/${book.id}`, {
+      method: "POST",
+      body: JSON.stringify(book),
+    });
+    if (res.ok) {
+      alert("レンタル完了");
+      // 再取得
+      await fetchBooks();
+    }
+  };
+  const postReturnBook = async (book: Book) => {
+    const res = await afetch(`/api/book/return/${book.id}`, {
+      method: "POST",
+      body: JSON.stringify(book),
+    });
+    if (res.ok) {
+      alert("返却完了");
+      // 再取得
+      await fetchBooks();
+    }
+  };
+
+  const fetchRentalBooks = async () => {
+    const res = await afetch(`/api/rental/books`);
+    if (res.ok) {
+      const resData = await res.json();
+
+      setRentalBooks(
+        resData.data.map((rb, i) => {
+          const rentalBook: RentalBook = {
+            id: rb.id,
+            isbn: rb.isbn,
+            title: rb.title,
+            author: rb.author,
+            thumbnailUrl: rb.thumbnail_url,
+            publicationDate: rb.publication_date,
+            publisher: rb.publisher,
+            stock: rb.stock,
+            dueDate: rb.due_date,
+            returnDate: rb.return_date,
+          };
+          return rentalBook;
+        })
+      );
+    }
+  };
 
   const fetchBooks = async () => {
     const res = await afetch(`/api/books`);
     if (res.ok) {
       const resData = await res.json();
-      setBooks(resData);
+      setBooks(
+        resData.map((book, i) => {
+          return {
+            id: book.id,
+            isbn: book.isbn,
+            title: book.title,
+            author: book.author,
+            thumbnailUrl: book.thumbnail_url,
+            publicationDate: book.publication_date,
+            publisher: book.publisher,
+            stock: book.stock,
+          };
+        })
+      );
     }
   };
   const postBook = async (book: Book) => {
@@ -38,6 +100,7 @@ const Top: React.FC<TopProps> = () => {
   };
   useEffect(() => {
     fetchBooks().then(() => console.log("fetch books."));
+    fetchRentalBooks().then(() => console.log("fetch rental books."));
   }, []);
   return (
     <div className={styles.container}>
@@ -59,7 +122,21 @@ const Top: React.FC<TopProps> = () => {
       </div>
       <div className={styles.bookListSection}>
         <h2 className={styles.title}>本一覧</h2>
-        <BookList books={books} />
+        <BookList
+          books={books}
+          onRentalClick={postRentalBook}
+          onReturnClick={postReturnBook}
+          onItemClick={() => {}}
+        />
+      </div>
+      <div className={styles.bookListSection}>
+        <h2 className={styles.title}>レンタル本一覧</h2>
+        <BookList
+          books={rentalBooks}
+          onRentalClick={postRentalBook}
+          onReturnClick={postReturnBook}
+          onItemClick={() => {}}
+        />
       </div>
     </div>
   );
