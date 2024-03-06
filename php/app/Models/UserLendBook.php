@@ -8,7 +8,7 @@ use CodeIgniter\Database\Exceptions\DatabaseException;
 
 class UserLendBook extends Model
 {
-  protected $table            = 'userlendbooks';
+  protected $table            = 'user_lend_books';
   protected $primaryKey       = 'id';
   protected $useAutoIncrement = true;
   protected $returnType       = 'array';
@@ -94,6 +94,7 @@ class UserLendBook extends Model
       $this->db->transComplete();
       $rst = true;
     } catch (DatabaseException $e) {
+      log_message('error', $e);
       $this->db->transRollback();
     }
     return $rst;
@@ -118,6 +119,25 @@ class UserLendBook extends Model
       $this->db->transComplete();
       $rst = true;
     } catch (DatabaseException $e) {
+      log_message('error', $e);
+      $this->db->transRollback();
+    }
+    return $rst;
+  }
+  public function userRentalBooks($user_id)
+  {
+    $rst = false;
+    try {
+      $this->db->transException(true)->transStart();
+      $rst = $this
+        ->select('books.*, return_date, due_date, lend_date')
+        ->join('books', 'user_lend_books.book_id = books.id')
+        ->where('user_id', $user_id)
+        ->findAll();
+
+      $this->db->transComplete();
+    } catch (DatabaseException $e) {
+      log_message('error', $e);
       $this->db->transRollback();
     }
     return $rst;
