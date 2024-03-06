@@ -27,9 +27,8 @@
 
 .details {
     flex-grow: 1;
-    width: 25vw;
+    width: 15vw;
     height: 30vh;
-    border-left: 1px solid #ccc;
 }
 
 .title {
