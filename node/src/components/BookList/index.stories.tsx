@@ -19,8 +19,8 @@ function genBooks(n: number) {
       isbn: `123-4567890123`,
       publisher: `Publisher dklasjfkldasjfk;ljdsalk;fjladsjflk;dasklfdsa ${i}`,
       stock: 2,
-      thumbnail_url: `https://via.placeholder.com/100x150`,
-      publication_date: new Date(`2020-01-01`),
+      thumbnailUrl: `https://via.placeholder.com/100x150`,
+      publicationDate: new Date(`2020-01-01`),
     });
   }
   return books;
