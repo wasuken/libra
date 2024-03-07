@@ -22,3 +22,9 @@ export interface SelectButton {
   text: string;
   onClick: () => Promise<void>;
 }
+
+export interface Choice {
+  onChoice: () => void;
+  choiceLabel: string;
+  choiceButtonType: string;
+}

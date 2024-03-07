@@ -30,8 +30,6 @@ const BookListItem: React.FC<BookListItemProps> = ({
   // short title
   const sTitle =
     book.title.length < 20 ? book.title : book.title.substring(0, 20) + "...";
-  // default url
-  console.log(book.thumbnailUrl);
   const dUrl =
     (book.thumbnailUrl && book.thumbnailUrl.length) <= 0
       ? "/no_image.png"
@@ -58,19 +56,39 @@ const BookListItem: React.FC<BookListItemProps> = ({
           </div>
         </div>
       </LinkLikeButton>
-      <ChoiceDialog
-        isOpen={isOpen}
-        onClose={(e) => {
-          e.preventDefault();
-          setIsOpen(false);
-          console.log("false");
-        }}
-        onChoice1={() => onRentalClick(book)}
-        onChoice2={() => onReturnClick(book)}
-        message={book.title}
-        choice1Label="借りる"
-        choice2Label="返す"
-      />
+      {onRentalClick === undefined ? (
+        <ChoiceDialog
+          isOpen={isOpen}
+          onClose={(e) => {
+            e.preventDefault();
+            setIsOpen(false);
+          }}
+          choices={[
+            {
+              onChoice: () => onReturnClick(book),
+              choiceLabel: "返却",
+              choiceButtonType: "choice2Button",
+            },
+          ]}
+          message={book.title}
+        />
+      ) : (
+        <ChoiceDialog
+          isOpen={isOpen}
+          onClose={(e) => {
+            e.preventDefault();
+            setIsOpen(false);
+          }}
+          choices={[
+            {
+              onChoice: () => onRentalClick(book),
+              choiceLabel: "借りる",
+              choiceButtonType: "choice1Button",
+            },
+          ]}
+          message={book.title}
+        />
+      )}
     </div>
   );
 };

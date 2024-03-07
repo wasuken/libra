@@ -1,25 +1,20 @@
 // ChoiceDialog.tsx
 import React, { useState, useEffect } from "react";
 import styles from "./index.module.css";
+import { Choice } from "@/const";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onChoice1: () => void;
-  onChoice2: () => void;
+  choices: Choice[];
   message: string;
-  choice1Label: string;
-  choice2Label: string;
 }
 
 const ChoiceDialog: React.FC<Props> = ({
   isOpen,
   onClose,
-  onChoice1,
-  onChoice2,
+  choices,
   message,
-  choice1Label,
-  choice2Label,
 }) => {
   if (!isOpen) return null;
 
@@ -28,18 +23,15 @@ const ChoiceDialog: React.FC<Props> = ({
       <div className={styles.dialog}>
         <p>{message}</p>
         <div>
-          <button
-            className={`${styles.button} ${styles.choice1Button}`}
-            onClick={onChoice1}
-          >
-            {choice1Label}
-          </button>
-          <button
-            className={`${styles.button} ${styles.choice2Button}`}
-            onClick={onChoice2}
-          >
-            {choice2Label}
-          </button>
+          {choices.map((choice, i) => (
+            <button
+              className={`${styles.button} ${styles[choice.choiceButtonType]}`}
+              onClick={choice.onChoice}
+            >
+              {choice.choiceLabel}
+            </button>
+          ))}
+
           <button
             className={`${styles.button} ${styles.closeButton}`}
             onClick={onClose}

@@ -26,7 +26,6 @@ const BookList: React.FC<BookListProps> = ({
             key={book.id}
             book={book}
             onClick={() => onItemClick(book)}
-            onRentalClick={onRentalClick}
             onReturnClick={onReturnClick}
           >
             <div>
@@ -46,7 +45,6 @@ const BookList: React.FC<BookListProps> = ({
             book={book}
             onClick={() => onItemClick(book)}
             onRentalClick={onRentalClick}
-            onReturnClick={onReturnClick}
           />
         )
       )}
