@@ -65,7 +65,10 @@ const BookListItem: React.FC<BookListItemProps> = ({
           }}
           choices={[
             {
-              onChoice: () => onReturnClick(book),
+              onChoice: () => {
+                onReturnClick(boo1k);
+                setIsOpen(false);
+              },
               choiceLabel: "返却",
               choiceButtonType: "choice2Button",
             },
@@ -79,13 +82,20 @@ const BookListItem: React.FC<BookListItemProps> = ({
             e.preventDefault();
             setIsOpen(false);
           }}
-          choices={[
-            {
-              onChoice: () => onRentalClick(book),
-              choiceLabel: "借りる",
-              choiceButtonType: "choice1Button",
-            },
-          ]}
+          choices={
+            book.stock > 0
+              ? [
+                  {
+                    onChoice: () => {
+                      onRentalClick(book);
+                      setIsOpen(false);
+                    },
+                    choiceLabel: "借りる",
+                    choiceButtonType: "choice1Button",
+                  },
+                ]
+              : []
+          }
           message={book.title}
         />
       )}
