@@ -9,6 +9,30 @@ use CodeIgniter\RESTful\ResourceController;
 
 class UserBooksController extends ResourceController
 {
+  public function index()
+  {
+    $model = new UserLendBook();
+    $user = auth()->user();
+    $data = $model->books($user->id);
+    $status = 200;
+    $msg = '';
+    return $this->respond([
+      "message" => $msg,
+      "data" => $data,
+    ], $status);
+  }
+  public function status()
+  {
+    $model = new UserLendBook();
+    $user = auth()->user();
+    $statusData = $model->status($user->id);
+    $status = 200;
+    $msg = '';
+    return $this->respond([
+      "message" => $msg,
+      "data" => $statusData,
+    ], $status);
+  }
   // // 本の返却
   public function return($id)
   {

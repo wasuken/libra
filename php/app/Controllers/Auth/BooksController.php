@@ -22,8 +22,7 @@ class BooksController extends BaseController
     $rules = [
       "title" => "required",
       "isbn" => "required|exact_length[13]|alpha_numeric",
-
-        "author" => "permit_empty",
+      "author" => "permit_empty",
       "thumbnail_url" => "permit_empty|valid_email",
       "stock" => "permit_empty|alpha_numeric",
       "publisher" => "permit_empty",

@@ -13,6 +13,7 @@ $routes->group("api", ["namespace" => "App\Controllers"], static function ($rout
   $routes->post("register", "AuthController::register");
   $routes->post('login', 'AuthController::jwtLogin');
 
+  $routes->get('user/books', 'Auth\UserBooksController::index', ['filter' => 'jwt']);
   $routes->get('books', 'Auth\BooksController::index', ['filter' => 'jwt']);
   $routes->get('rental/books', 'Auth\UserBooksController::rentalbooks', ['filter' => 'jwt']);
   $routes->post('book', 'Auth\BooksController::create', ['filter' => 'jwt']);

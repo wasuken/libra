@@ -54,8 +54,7 @@ class UserLendBook extends Model
 
     return empty($record);
   }
-  // すでに最大レンタル数に達しているか
-  private function isOverBorrowLimit($user_id)
+  private function userRentalCount($user_id)
   {
     $model = new UserLendBook();
     $record = $model
@@ -64,10 +63,13 @@ class UserLendBook extends Model
       ->where('return_date is null')
       ->first();
 
-    $cnt = $record['cnt'];
-
+    return $record['cnt'];
+  }
+  // すでに最大レンタル数に達しているか
+  private function isOverBorrowLimit($user_id)
+  {
     // 4冊まで
-    return $cnt > 4;
+    return $this->userRentalCount($user_id) > 4;
   }
 
   // ユーザーのレンタル処理
@@ -141,5 +143,20 @@ class UserLendBook extends Model
       $this->db->transRollback();
     }
     return $rst;
+  }
+  public function status($user_id)
+  {
+    $rentalCount = $this->userRentalCount($user_id);
+    return [
+      "bookCount" => $rentalCount,
+    ];
+  }
+  public function books()
+  {
+    return $this
+      ->select('books.*, return_date, due_date, lend_date, user_id')
+      ->join('books', 'user_lend_books.book_id = books.id', 'left')
+      ->where('user_id', $user_id)
+      ->findAll();
   }
 }
