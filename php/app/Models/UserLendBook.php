@@ -154,7 +154,7 @@ class UserLendBook extends Model
   public function books()
   {
     return $this
-      ->select('books.*, return_date, due_date, lend_date, user_id')
+      ->select('books.*, return_date, due_date, lend_date, user_id, username')
       ->join('books', 'user_lend_books.book_id = books.id', 'left')
       ->where('user_id', $user_id)
       ->findAll();
