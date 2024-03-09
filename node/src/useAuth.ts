@@ -27,7 +27,6 @@ const useAuth = () => {
         eParams.headers.Authorization = `Bearer ${tk}`;
         eParams.headers["Content-Type"] = "application/json";
       }
-      console.log("debug", eParams);
       return fetch(url, eParams);
     };
   };
@@ -35,6 +34,13 @@ const useAuth = () => {
   const logout = () => {
     setToken("");
     localStorage.removeItem("token");
+  };
+  const getUserId = (token) => {
+    if (!token) {
+      return null;
+    }
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.id;
   };
 
   const isTokenExpired = (token) => {
@@ -57,6 +63,7 @@ const useAuth = () => {
     isTokenExpired,
     isLogin,
     afetch: genAfetch(token),
+    userId: getUserId(token),
   };
 };
 
