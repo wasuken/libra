@@ -13,7 +13,7 @@ class UserBooksController extends ResourceController
   {
     $model = new UserLendBook();
     $user = auth()->user();
-    $data = $model->books($user->id);
+    $data = $model->books();
     $status = 200;
     $msg = '';
     return $this->respond([

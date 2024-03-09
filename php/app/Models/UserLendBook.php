@@ -114,9 +114,10 @@ class UserLendBook extends Model
         ->where('book_id', $book_id)
         ->where('user_id', $user_id)
         ->where('return_date is null')
-        ->update([
-          'return_date' => date("Y-m-d"),
-        ]);
+        ->set([
+          'return_date' => date("Y-m-d H:i:s"),
+        ])
+        ->update();
 
       $this->db->transComplete();
       $rst = true;
@@ -153,10 +154,11 @@ class UserLendBook extends Model
   }
   public function books()
   {
-    return $this
+    $model = new Book();
+    return $model
       ->select('books.*, return_date, due_date, lend_date, user_id, username')
-      ->join('books', 'user_lend_books.book_id = books.id', 'left')
-      ->where('user_id', $user_id)
+      ->join('user_lend_books', 'book_id = books.id and return_date is null', 'left')
+      ->join('users', 'user_id = users.id', 'left')
       ->findAll();
   }
 }
