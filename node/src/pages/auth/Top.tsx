@@ -7,7 +7,7 @@ import styles from "./Top.module.css"; // CSS Moduleのインポート
 
 // 仮の書籍データ
 const Top: React.FC<TopProps> = () => {
-  const { logout, afetch } = useAuth();
+  const { logout, afetch, userId } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [rentalBooks, setRentalBooks] = useState<RentalBook[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,48 +35,46 @@ const Top: React.FC<TopProps> = () => {
     }
   };
 
-  const fetchRentalBooks = async () => {
-    const res = await afetch(`/api/rental/books`);
-    if (res.ok) {
-      const resData = await res.json();
-
-      setRentalBooks(
-        resData.data.map((rb, i) => {
-          const rentalBook: RentalBook = {
-            id: rb.id,
-            isbn: rb.isbn,
-            title: rb.title,
-            author: rb.author,
-            thumbnailUrl: rb.thumbnail_url,
-            publicationDate: rb.publication_date,
-            publisher: rb.publisher,
-            stock: rb.stock,
-            dueDate: rb.due_date,
-            returnDate: rb.return_date,
-          };
-          return rentalBook;
-        })
-      );
-    }
-  };
-
   const fetchBooks = async () => {
-    const res = await afetch(`/api/books`);
+    const res = await afetch(`/api/user/books`);
     if (res.ok) {
       const resData = await res.json();
+      /* console.log("debug", userId);
+       * console.log("debug", resData.data); */
       setBooks(
-        resData.map((book, i) => {
-          return {
-            id: book.id,
-            isbn: book.isbn,
-            title: book.title,
-            author: book.author,
-            thumbnailUrl: book.thumbnail_url,
-            publicationDate: book.publication_date,
-            publisher: book.publisher,
-            stock: book.stock,
-          };
-        })
+        resData.data
+          .filter((b) => parseInt(b.user_id) != userId)
+          .map((book) => {
+            return {
+              id: book.id,
+              isbn: book.isbn,
+              title: book.title,
+              author: book.author,
+              thumbnailUrl: book.thumbnail_url,
+              publicationDate: book.publication_date,
+              publisher: book.publisher,
+              stock: book.stock,
+            };
+          })
+      );
+      setRentalBooks(
+        resData.data
+          .filter((b) => parseInt(b.user_id) == userId)
+          .map((rb, i) => {
+            const rentalBook: RentalBook = {
+              id: rb.id,
+              isbn: rb.isbn,
+              title: rb.title,
+              author: rb.author,
+              thumbnailUrl: rb.thumbnail_url,
+              publicationDate: rb.publication_date,
+              publisher: rb.publisher,
+              stock: rb.stock,
+              dueDate: rb.due_date,
+              returnDate: rb.return_date,
+            };
+            return rentalBook;
+          })
       );
     }
   };
@@ -100,7 +98,6 @@ const Top: React.FC<TopProps> = () => {
   };
   useEffect(() => {
     fetchBooks().then(() => console.log("fetch books."));
-    fetchRentalBooks().then(() => console.log("fetch rental books."));
   }, []);
   return (
     <div className={styles.container}>
@@ -130,7 +127,7 @@ const Top: React.FC<TopProps> = () => {
         />
       </div>
       <div className={styles.bookListSection}>
-        <h2 className={styles.title}>レンタル本一覧</h2>
+        <h2 className={styles.title}>レンタル中の本</h2>
         <BookList
           books={rentalBooks}
           onRentalClick={postRentalBook}
