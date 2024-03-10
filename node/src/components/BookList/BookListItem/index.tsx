@@ -66,7 +66,7 @@ const BookListItem: React.FC<BookListItemProps> = ({
           choices={[
             {
               onChoice: () => {
-                onReturnClick(boo1k);
+                onReturnClick(book);
                 setIsOpen(false);
               },
               choiceLabel: "返却",

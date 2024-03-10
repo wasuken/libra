@@ -32,7 +32,7 @@ const BookList: React.FC<BookListProps> = ({
               <h3>
                 返却日:{" "}
                 {book.returnDate === null ? (
-                  <spam style={{ color: "red" }}>未返却</spam>
+                  <span style={{ color: "red" }}>未返却</span>
                 ) : (
                   book.returnDate
                 )}

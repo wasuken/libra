@@ -38,11 +38,15 @@ const ISBNScanner: React.FC<ISBNScannerProps> = ({ onISBNDetected }) => {
           } else {
             Quagga.start();
           }
-        },
+        }
       );
 
       Quagga.onDetected((data) => {
         const code = data.codeResult.code;
+        if (code.length != 13 || !code.match(/^978/)) {
+          // 対象となるisbnではない
+          return;
+        }
         onISBNDetected(code);
         Quagga.stop();
         setIsScanning(false);

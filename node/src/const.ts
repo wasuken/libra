@@ -20,6 +20,7 @@ export function isRentalBook(book: Book | RentalBook): book is RentalBook {
 
 export interface SelectButton {
   text: string;
+  buttonType: "white" | "red";
   onClick: () => Promise<void>;
 }
 

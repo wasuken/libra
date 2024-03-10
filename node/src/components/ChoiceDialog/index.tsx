@@ -25,6 +25,7 @@ const ChoiceDialog: React.FC<Props> = ({
         <div>
           {choices.map((choice, i) => (
             <button
+              key={i}
               className={`${styles.button} ${styles[choice.choiceButtonType]}`}
               onClick={choice.onChoice}
             >
