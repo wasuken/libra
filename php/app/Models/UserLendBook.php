@@ -155,10 +155,12 @@ class UserLendBook extends Model
   public function books()
   {
     $model = new Book();
-    return $model
-      ->select('books.*, return_date, due_date, lend_date, user_id, username')
-      ->join('user_lend_books', 'book_id = books.id and return_date is null', 'left')
-      ->join('users', 'user_id = users.id', 'left')
-      ->findAll();
+    $query = $this->db->query(<<<EOT
+select b.*, stock - (select count(*) from user_lend_books as ub where ub.book_id = b.id and ub.return_date is null) as stock, return_date, due_date, lend_date, user_id, username
+from books as b
+left outer join user_lend_books as ub on book_id = b.id and return_date is null
+left outer join users as u on user_id = u.id
+EOT);
+    return $query->getResultArray();
   }
 }
