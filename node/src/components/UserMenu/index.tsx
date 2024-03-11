@@ -5,10 +5,11 @@ import styles from "./index.module.css";
 import { SelectButton } from "@/const";
 
 interface UserMenuProps {
+  username: string;
   buttons: SelectButton[];
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ buttons }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ username, buttons }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -17,7 +18,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ buttons }) => {
     <div className={styles.userMenu}>
       <div className={styles.userInfo} onClick={handleClick}>
         <FaRegUser />
-        <span className={styles.userName}>John Doe</span>
+        <span className={styles.userName}>{username}</span>
       </div>
       {isOpen && (
         <ul className={styles.menuList}>

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import BookInfoModal from "@/components/BookInfoModal";
 import BookList from "@/components/BookList";
+import UserMenu from "@/components/UserMenu";
 import { Book, RentalBook } from "@/const";
 import useAuth from "@/useAuth";
 import styles from "./Top.module.css"; // CSS Moduleのインポート
 
 // 仮の書籍データ
 const Top: React.FC<TopProps> = () => {
-  const { logout, afetch, userId } = useAuth();
+  const { logout, afetch, userId, username } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [rentalBooks, setRentalBooks] = useState<RentalBook[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -103,9 +104,16 @@ const Top: React.FC<TopProps> = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Book Manager</h1>
-        <button onClick={logout} className={styles.logoutButton}>
-          Logout
-        </button>
+        <UserMenu
+          username={username}
+          buttons={[
+            {
+              text: "logout",
+              buttonType: "red",
+              onClick: () => logout(),
+            },
+          ]}
+        />
       </div>
       <div className={styles.bookRegistrationSection}>
         <button onClick={handleOpenModal} className={styles.registerButton}>

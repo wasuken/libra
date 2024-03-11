@@ -49,6 +49,7 @@ class AuthController extends ResourceController
         'email' => $user->email,
         'id' => $user->id,
         'sub' => $user->id,
+        'username' => $user->username,
       ];
 
       /** @var JWTManager $manager */

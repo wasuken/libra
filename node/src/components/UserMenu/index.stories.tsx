@@ -12,6 +12,7 @@ const Template: Story<UserMenuProps> = (args) => <UserMenu {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
+  username: "test",
   buttons: [
     {
       text: "test1",

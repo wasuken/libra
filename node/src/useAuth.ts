@@ -42,6 +42,13 @@ const useAuth = () => {
     const payload = JSON.parse(atob(token.split(".")[1]));
     return payload.id;
   };
+  const getUsername = (token) => {
+    if (!token) {
+      return null;
+    }
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.username;
+  };
 
   const isTokenExpired = (token) => {
     if (!token) {
@@ -64,6 +71,7 @@ const useAuth = () => {
     isLogin,
     afetch: genAfetch(token),
     userId: getUserId(token),
+    username: getUsername(token),
   };
 };
 
