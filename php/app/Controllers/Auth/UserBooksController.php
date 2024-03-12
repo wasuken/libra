@@ -87,4 +87,17 @@ class UserBooksController extends ResourceController
       "data" => $rst
     ], $status);
   }
+  public function reserve($id)
+  {
+    $model = new UserLendReserveBook();
+    $user = auth()->user();
+    $model->reserve($user->id, $id);
+    $msg = "";
+    $status = 200;
+    return $this->respond([
+      "message" => $msg,
+      "data" => $rst
+    ], $status);
+  }
+
 }

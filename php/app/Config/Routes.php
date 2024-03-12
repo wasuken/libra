@@ -20,8 +20,9 @@ $routes->group("api", ["namespace" => "App\Controllers"], static function ($rout
   $routes->post('book/rental/(:segment)', 'Auth\UserBooksController::rental/$1', ['filter' => 'jwt']);
   $routes->post('book/return/(:segment)', 'Auth\UserBooksController::return/$1', ['filter' => 'jwt']);
 
-
   $routes->group('user', ["namespace" => "App\Controllers\Auth", 'filter' => 'jwt'], function($routes) {
     $routes->get("logout", "AuthController::logout");
+      $routes->get('books', 'UserBooksController::index', ['filter' => 'jwt']);
+      $routes->get('book/reserve', 'UserBooksController::reserve', ['filter' => 'jwt']);
   });
 });
