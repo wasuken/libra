@@ -78,11 +78,13 @@ class UserLendBook extends Model
     $rst = false;
     try {
       $this->db->transException(true)->transStart();
-
+      $resModel = new UserLendBookReserve();
       if(!$this->isUserLending($user_id, $book_id)){
         throw new DatabaseException('Already rental.');
       }else if($this->isOverBorrowLimit($book_id)){
         throw new DatabaseException('Rental Book num over borrow limit.');
+      }else if($res->otherReserves($user_id, $book_id) > 0){
+        throw new DatabaseException('book is reserving.');
       }
 
       $rst = $this->insert([
@@ -92,6 +94,7 @@ class UserLendBook extends Model
         // とりえあず二週間後
         'due_date' => date("Y-m-d", strtotime("+14 day")),
       ]);
+      $res->disableReserve($user_id, $book_id);
 
       $this->db->transComplete();
       $rst = true;
@@ -156,10 +159,18 @@ class UserLendBook extends Model
   {
     $model = new Book();
     $query = $this->db->query(<<<EOT
-select b.*, stock - (select count(*) from user_lend_books as ub where ub.book_id = b.id and ub.return_date is null) as stock, return_date, due_date, lend_date, user_id, username
+select b.*,
+stock - (
+      select count(*) from user_lend_books as ub where ub.book_id = b.id and ub.return_date is null
+) as stock,
+(
+      select count(*) from user_lend_book_reserves as res
+      where res.book_id = b.id and res.status = 0
+) as reserves,
+return_date, due_date, lend_date, user_id, username
 from books as b
-left outer join user_lend_books as ub on book_id = b.id and return_date is null
-left outer join users as u on user_id = u.id
+left outer join user_lend_books as ub on ub.book_id = b.id and return_date is null
+left outer join users as u on ub.user_id = u.id
 EOT);
     return $query->getResultArray();
   }

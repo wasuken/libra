@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class UserLendBookReserve extends Model
 {
-  protected $table            = 'userlendbookreserves';
+  protected $table            = 'user_lend_book_reserves';
   protected $primaryKey       = 'id';
   protected $useAutoIncrement = true;
   protected $returnType       = 'array';
@@ -47,5 +47,32 @@ class UserLendBookReserve extends Model
       'book_id' => $book_id,
       'user_id' => $user_id,
     ]);
+  }
+  // 予約できる本か
+  // 自分以外の有効な予約がはいっていない
+  public function otherReserves($user_id, $book_id)
+  {
+    // 予約されていない
+    $rst = $this
+      ->where('status = 0')
+      // 自分が予約している場合はOK
+      ->where('user_id <> ', $user_id)
+      ->where('book_id', $book_id)
+      ->findAll();
+
+
+    return count($rst);
+  }
+  // 予約をとりけす。
+  public function disableReserve($user_id, $book_id)
+  {
+    $this
+      ->where('status = 0')
+      ->where('user_id', $user_id)
+      ->where('book_id', $book_id)
+      ->set([
+        'status' => 1,
+      ])
+      ->update();
   }
 }

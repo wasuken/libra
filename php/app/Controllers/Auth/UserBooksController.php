@@ -5,6 +5,8 @@ namespace App\Controllers\Auth;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserLendBook;
+use App\Models\UserLendBookReserve;
+
 use CodeIgniter\RESTful\ResourceController;
 
 class UserBooksController extends ResourceController
@@ -89,14 +91,14 @@ class UserBooksController extends ResourceController
   }
   public function reserve($id)
   {
-    $model = new UserLendReserveBook();
+    $model = new UserLendBookReserve();
     $user = auth()->user();
     $model->reserve($user->id, $id);
     $msg = "";
     $status = 200;
     return $this->respond([
       "message" => $msg,
-      "data" => $rst
+      "data" => [],
     ], $status);
   }
 

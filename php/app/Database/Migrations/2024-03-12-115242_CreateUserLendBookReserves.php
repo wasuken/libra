@@ -29,6 +29,10 @@ class CreateUserBookLendReserves extends Migration
         'type' => 'datetime',
         'null'=> false,
       ],
+      'status' => [
+        'type' => 'TINYINT',
+        'default' => 0
+      ],
     ]);
     $this->forge->addKey('lend_reserve_id', true);
     $this->forge->createTable('user_lend_book_reserves');

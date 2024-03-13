@@ -22,7 +22,7 @@ $routes->group("api", ["namespace" => "App\Controllers"], static function ($rout
 
   $routes->group('user', ["namespace" => "App\Controllers\Auth", 'filter' => 'jwt'], function($routes) {
     $routes->get("logout", "AuthController::logout");
-      $routes->get('books', 'UserBooksController::index', ['filter' => 'jwt']);
-      $routes->get('book/reserve', 'UserBooksController::reserve', ['filter' => 'jwt']);
+    $routes->get('books', 'UserBooksController::index', ['filter' => 'jwt']);
+    $routes->post('book/reserve/(:segment)', 'UserBooksController::reserve/$1', ['filter' => 'jwt']);
   });
 });
