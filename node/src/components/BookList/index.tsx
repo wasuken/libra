@@ -10,6 +10,7 @@ interface BookListProps {
   onItemClick: (book: Book | RentalBook) => Promise<void>;
   onRentalClick: (book: Book) => Promise<void>;
   onReturnClick: (book: Book) => Promise<void>;
+  onReserveClick: (book: Book) => Promise<void>;
 }
 
 const BookList: React.FC<BookListProps> = ({
@@ -17,6 +18,7 @@ const BookList: React.FC<BookListProps> = ({
   onItemClick,
   onRentalClick,
   onReturnClick,
+  onReserveClick,
 }) => {
   return (
     <div className={styles.list}>
@@ -45,6 +47,7 @@ const BookList: React.FC<BookListProps> = ({
             book={book}
             onClick={() => onItemClick(book)}
             onRentalClick={onRentalClick}
+            onReserveClick={onReserveClick}
           />
         )
       )}

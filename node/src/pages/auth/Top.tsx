@@ -13,6 +13,17 @@ const Top: React.FC<TopProps> = () => {
   const [rentalBooks, setRentalBooks] = useState<RentalBook[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const postReserveBook = async (book: Book) => {
+    const res = await afetch(`/api/user/book/reserve/${book.id}`, {
+      method: "POST",
+      body: JSON.stringify(book),
+    });
+    if (res.ok) {
+      alert("予約完了");
+      // 再取得
+      await fetchBooks();
+    }
+  };
   const postRentalBook = async (book: Book) => {
     const res = await afetch(`/api/book/rental/${book.id}`, {
       method: "POST",
@@ -55,6 +66,7 @@ const Top: React.FC<TopProps> = () => {
               publicationDate: book.publication_date,
               publisher: book.publisher,
               stock: book.stock,
+              reserves: book.reserves,
             };
           })
       );
@@ -131,6 +143,7 @@ const Top: React.FC<TopProps> = () => {
           books={books}
           onRentalClick={postRentalBook}
           onReturnClick={postReturnBook}
+          onReserveClick={postReserveBook}
           onItemClick={() => {}}
         />
       </div>
@@ -140,6 +153,7 @@ const Top: React.FC<TopProps> = () => {
           books={rentalBooks}
           onRentalClick={postRentalBook}
           onReturnClick={postReturnBook}
+          onReserveClick={postReserveBook}
           onItemClick={() => {}}
         />
       </div>

@@ -12,6 +12,7 @@ interface BookListItemProps {
   onClick: (book: Book) => Promise<void>;
   onRentalClick: (book: Book) => Promise<void>;
   onReturnClick: (book: Book) => Promise<void>;
+  onReserveClick: (book: Book) => Promise<void>;
   children: React.ReactNode;
 }
 
@@ -20,6 +21,7 @@ const BookListItem: React.FC<BookListItemProps> = ({
   onClick,
   onRentalClick,
   onReturnClick,
+  onReserveClick,
   children,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -47,7 +49,10 @@ const BookListItem: React.FC<BookListItemProps> = ({
             <h2 className={styles.title}>{sTitle}</h2>
             <p className={styles.isbn}>ISBN: {book.isbn}</p>
             <p className={styles.publisher}>Publisher: {sPublisher}</p>
-            <p className={styles.stock}>Stock: {book.stock}</p>
+            <p className={styles.stock}>予約可能蔵書数: {book.stock}</p>
+            <p className={styles.reserves}>
+              予約{book.reserves && book.reserves > 0 ? "有" : "無"}
+            </p>
             <p className={styles.date}>
               Published:{" "}
               {new Date(book.publicationDate).toISOString().split("T")[0]}
@@ -94,7 +99,16 @@ const BookListItem: React.FC<BookListItemProps> = ({
                     choiceButtonType: "choice1Button",
                   },
                 ]
-              : []
+              : [
+                  {
+                    onChoice: () => {
+                      onReserveClick(book);
+                      setIsOpen(false);
+                    },
+                    choiceLabel: "予約",
+                    choiceButtonType: "choice1Button",
+                  },
+                ]
           }
           message={book.title}
         />

@@ -7,6 +7,7 @@ export interface Book {
   publicationDate: string;
   publisher: string;
   stock: number;
+  reserves: number;
 }
 
 export interface RentalBook extends Book {
