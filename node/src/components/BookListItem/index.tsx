@@ -49,7 +49,7 @@ const BookListItem: React.FC<BookListItemProps> = ({
             <h2 className={styles.title}>{sTitle}</h2>
             <p className={styles.isbn}>ISBN: {book.isbn}</p>
             <p className={styles.publisher}>Publisher: {sPublisher}</p>
-            <p className={styles.stock}>予約可能蔵書数: {book.stock}</p>
+            <p className={styles.stock}>レンタル可能蔵書数: {book.stock}</p>
             <p className={styles.reserves}>
               予約{book.reserves && book.reserves > 0 ? "有" : "無"}
             </p>
