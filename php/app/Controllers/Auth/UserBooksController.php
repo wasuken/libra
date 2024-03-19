@@ -101,5 +101,17 @@ class UserBooksController extends ResourceController
       "data" => [],
     ], $status);
   }
+  public function extension($id)
+  {
+    $model = new UserLendBookReserve();
+    $user = auth()->user();
+    $model->extension($user->id, $id);
+    $msg = "";
+    $status = 200;
+    return $this->respond([
+      "message" => $msg,
+      "data" => [],
+    ], $status);
+  }
 
 }

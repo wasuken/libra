@@ -75,4 +75,18 @@ class UserLendBookReserve extends Model
       ])
       ->update();
   }
+  public function extension($user_id, $book_id)
+  {
+    // 一週間追加
+    // 予約期間中かつ延長済ではない
+    $this
+      ->where('status = 0')
+      ->where('return_date', date('Y-m-d'))
+      ->where('user_id', $user_id)
+      ->where('book_id', $book_id)
+      ->set([
+        'status' => 1,
+      ])
+      ->update();
+  }
 }

@@ -1,0 +1,8 @@
+/* BookList/index.module.css */
+.list {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* iOSデバイスでのスムーズなスクロールを有効化 */
+  gap: 10px; /* 各アイテム間の間隔 */
+  padding: 10px; /* コンテナのパディング */
+}

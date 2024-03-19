@@ -1,6 +1,6 @@
 // BookList/index.tsx
 import React from "react";
-import BookListItem from "./BookListItem";
+import BookListItem from "@/components/BookListItem";
 import styles from "./index.module.css";
 import { Book, RentalBook, isRentalBook } from "@/const";
 import ChoiceDialog from "@/components/ChoiceDialog";

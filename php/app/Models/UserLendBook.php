@@ -83,8 +83,8 @@ class UserLendBook extends Model
         throw new DatabaseException('Already rental.');
       }else if($this->isOverBorrowLimit($book_id)){
         throw new DatabaseException('Rental Book num over borrow limit.');
-      }else if($res->otherReserves($user_id, $book_id) > 0){
-        throw new DatabaseException('book is reserving.');
+      }else if($resModel->otherReserves($user_id, $book_id) > 0){
+        throw new DatabaseException('Book is reserving.');
       }
 
       $rst = $this->insert([
