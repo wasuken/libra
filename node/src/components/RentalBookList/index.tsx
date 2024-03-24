@@ -1,6 +1,6 @@
 // RentalBookList/index.tsx
 import React from "react";
-import RentalBookListItem from "@/components/RentalBookListItem";
+import BookListItem from "@/components/BookListItem";
 import styles from "./index.module.css";
 import { Book, RentalBook, isRentalBook } from "@/const";
 import ChoiceDialog from "@/components/ChoiceDialog";
@@ -19,7 +19,7 @@ const RentalBookList: React.FC<RentalBookListProps> = ({
   return (
     <div className={styles.list}>
       {books.map((book) => (
-        <RentalBookListItem
+        <BookListItem
           key={book.id}
           book={book}
           onClick={() => onItemClick(book)}
@@ -35,7 +35,7 @@ const RentalBookList: React.FC<RentalBookListProps> = ({
               )}
             </h3>
           </div>
-        </RentalBookListItem>
+        </BookListItem>
       ))}
     </div>
   );
