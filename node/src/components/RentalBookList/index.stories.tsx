@@ -1,7 +1,7 @@
 // BookList/index.stories.tsx
 import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
-import BookList, { BookListProps } from "./index";
+import RentalBookList, { RentalBookListProps } from "./index";
 
 export default {
   title: "Organizing/RentalBookList",
@@ -22,9 +22,9 @@ function genBooks(n: number) {
       publisher: `Publisher dklasjfkldasjfk;ljdsalk;fjladsjflk;dasklfdsa ${i}`,
       stock: 2,
       thumbnailUrl: `https://via.placeholder.com/100x150`,
-      publicationDate: new Date(`2020-01-01`),
-      dueDate: new Date(`2020-01-01`),
-      returnDate: new Date(`2020-01-01`),
+      publicationDate: `2020-01-01`,
+      dueDate: `2020-01-01`,
+      returnDate: `2020-01-01`,
     });
   }
   return books;
@@ -33,6 +33,14 @@ function genBooks(n: number) {
 export const Default = Template.bind({});
 Default.args = {
   books: genBooks(30),
+  onItemClick: (b) => {
+    alert(b.title);
+  },
+};
+
+export const EmptyList = Template.bind({});
+EmptyList.args = {
+  books: [],
   onItemClick: (b) => {
     alert(b.title);
   },

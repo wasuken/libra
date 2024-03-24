@@ -33,3 +33,11 @@ Default.args = {
     alert(b.title);
   },
 };
+
+export const EmptyList = Template.bind({});
+EmptyList.args = {
+  books: [],
+  onItemClick: (b) => {
+    alert(b.title);
+  },
+};

@@ -4,6 +4,7 @@ import BookListItem from "@/components/BookListItem";
 import styles from "./index.module.css";
 import { Book, RentalBook, isRentalBook } from "@/const";
 import ChoiceDialog from "@/components/ChoiceDialog";
+import ListNoData from "@/components/ListNoData";
 
 interface ReserveBookListProps {
   books: Book | RentalBook[];
@@ -16,6 +17,7 @@ const ReserveBookList: React.FC<ReserveBookListProps> = ({
   onItemClick,
   onRentalClick,
 }) => {
+  if (books.length <= 0) return <ListNoData />;
   return (
     <div className={styles.list}>
       {books.map((book) => (
