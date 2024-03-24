@@ -23,7 +23,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ username, buttons }) => {
       {isOpen && (
         <ul className={styles.menuList}>
           {buttons.map((button, i) => (
-            <li key={i} className={styles.list1}>
+            <li key={i} className={styles.menuListItem}>
               <div
                 className={`${styles.menuButton} ${styles[button.buttonType]}`}
                 onClick={button.onClick}
