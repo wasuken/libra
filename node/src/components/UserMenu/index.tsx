@@ -18,7 +18,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ username, buttons }) => {
     <div className={styles.userMenu}>
       <div className={styles.userInfo} onClick={handleClick}>
         <FaRegUser />
-        <span className={styles.userName}>{username}</span>
+        {isOpen && <span className={styles.userName}>{username}</span>}
       </div>
       {isOpen && (
         <ul className={styles.menuList}>
