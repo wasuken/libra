@@ -7,15 +7,11 @@ const useAuth = () => {
   const { token, setToken } = useContext(AuthContext);
 
   const login = async (email: string, password: string) => {
-    try {
-      const response = await axios.post("/api/login", {
-        email,
-        password,
-      });
-      setToken(response.data.access_token);
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
+    const response = await axios.post("/api/login", {
+      email,
+      password,
+    });
+    setToken(response.data.access_token);
   };
   const genAfetch = (tk) => {
     return (url, params = {}) => {

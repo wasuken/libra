@@ -13,9 +13,10 @@ type LoginFormInputs = z.infer<typeof schema>;
 
 interface IProps {
   handleParamSubmit: (email: string, password: string) => Promise<void>;
+  errorMessage: string;
 }
 
-const LoginForm: React.FC = ({ handleParamSubmit }: IProps) => {
+const LoginForm: React.FC = ({ handleParamSubmit, errorMessage }: IProps) => {
   const {
     register,
     handleSubmit,
@@ -33,6 +34,7 @@ const LoginForm: React.FC = ({ handleParamSubmit }: IProps) => {
   return (
     <div className={styles.formContainer}>
       <h2 className={styles.formTitle}>ログイン</h2>
+      {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formGroup}>
           <label htmlFor="email" className={styles.label}>
