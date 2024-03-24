@@ -3,6 +3,7 @@ import BookInfoModal from "@/components/BookInfoModal";
 import BookList from "@/components/BookList";
 import RentalBookList from "@/components/RentalBookList";
 import ReserveBookList from "@/components/ReserveBookList";
+import BookListTab from "@/components/BookListTab";
 import UserMenu from "@/components/UserMenu";
 import { Book, RentalBook, ReserveBook } from "@/const";
 import useAuth from "@/useAuth";
@@ -140,6 +141,46 @@ const Top: React.FC<TopProps> = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  const tabs: BookListInfo[] = [
+    {
+      title: "本一覧",
+      contents: (
+        <BookList
+          books={books}
+          onRentalClick={postRentalBook}
+          onReturnClick={postReturnBook}
+          onReserveClick={postReserveBook}
+          onItemClick={() => {}}
+        />
+      ),
+    },
+    {
+      title: "レンタル中の本",
+      contents: (
+        <RentalBookList
+          books={rentalBooks}
+          onRentalClick={postRentalBook}
+          onReturnClick={postReturnBook}
+          onReserveClick={postReserveBook}
+          onItemClick={() => {}}
+        />
+      ),
+    },
+    {
+      title: "予約中の本",
+      contents: (
+        <ReserveBookList
+          books={reserveBooks}
+          onRentalClick={postRentalBook}
+          onReturnClick={postReturnBook}
+          onReserveClick={postReserveBook}
+          onItemClick={() => {}}
+        />
+      ),
+    },
+  ];
+
   useEffect(() => {
     fetchBooks().then(() => console.log("fetch books."));
   }, []);
@@ -151,53 +192,26 @@ const Top: React.FC<TopProps> = () => {
           username={username}
           buttons={[
             {
-              text: "logout",
-              buttonType: "red",
+              text: "ログアウト",
+              buttonType: "blue",
               onClick: () => logout(),
+            },
+            {
+              text: "本の登録",
+              buttonType: "blue",
+              onClick: handleOpenModal,
             },
           ]}
         />
       </div>
       <div className={styles.bookRegistrationSection}>
-        <button onClick={handleOpenModal} className={styles.registerButton}>
-          本を登録する
-        </button>
         <BookInfoModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onSubmit={postBook}
         />
       </div>
-      <div className={styles.bookListSection}>
-        <h2 className={styles.title}>本一覧</h2>
-        <BookList
-          books={books}
-          onRentalClick={postRentalBook}
-          onReturnClick={postReturnBook}
-          onReserveClick={postReserveBook}
-          onItemClick={() => {}}
-        />
-      </div>
-      <div className={styles.bookListSection}>
-        <h2 className={styles.title}>レンタル中の本</h2>
-        <RentalBookList
-          books={rentalBooks}
-          onRentalClick={postRentalBook}
-          onReturnClick={postReturnBook}
-          onReserveClick={postReserveBook}
-          onItemClick={() => {}}
-        />
-      </div>
-      <div className={styles.bookListSection}>
-        <h2 className={styles.title}>予約中の本</h2>
-        <ReserveBookList
-          books={reserveBooks}
-          onRentalClick={postRentalBook}
-          onReturnClick={postReturnBook}
-          onReserveClick={postReserveBook}
-          onItemClick={() => {}}
-        />
-      </div>
+      <BookListTab tabs={tabs} />
     </div>
   );
 };

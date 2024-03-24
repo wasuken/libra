@@ -1,0 +1,27 @@
+/* BookTabs.module.css */
+.bookTabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabButtons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.tabButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.activeTabButton {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.tabContent {
+  padding: 1rem;
+}
