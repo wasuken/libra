@@ -15,6 +15,10 @@ export interface RentalBook extends Book {
   returnDate: string;
 }
 
+export interface ReserveBook extends Book {
+  reserveDate: string;
+}
+
 export function isRentalBook(book: Book | RentalBook): book is RentalBook {
   return (book as RentalBook).returnDate !== undefined;
 }

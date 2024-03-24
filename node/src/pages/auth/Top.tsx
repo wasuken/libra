@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import BookInfoModal from "@/components/BookInfoModal";
 import BookList from "@/components/BookList";
+import RentalBookList from "@/components/RentalBookList";
+import ReserveBookList from "@/components/ReserveBookList";
 import UserMenu from "@/components/UserMenu";
-import { Book, RentalBook } from "@/const";
+import { Book, RentalBook, ReserveBook } from "@/const";
 import useAuth from "@/useAuth";
 import styles from "./Top.module.css"; // CSS Moduleのインポート
 
@@ -11,6 +13,7 @@ const Top: React.FC<TopProps> = () => {
   const { logout, afetch, userId, username } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [rentalBooks, setRentalBooks] = useState<RentalBook[]>([]);
+  const [reserveBooks, setReserveBooks] = useState<ReserveBook[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const postReserveBook = async (book: Book) => {
@@ -55,7 +58,11 @@ const Top: React.FC<TopProps> = () => {
        * console.log("debug", resData.data); */
       setBooks(
         resData.data
-          .filter((b) => parseInt(b.user_id) != userId)
+          .filter(
+            (b) =>
+              parseInt(b.rental_user_id) != userId &&
+              parseInt(b.reserve_user_id) != userId
+          )
           .map((book) => {
             return {
               id: book.id,
@@ -66,15 +73,19 @@ const Top: React.FC<TopProps> = () => {
               publicationDate: book.publication_date,
               publisher: book.publisher,
               stock: book.stock,
-              reserves: book.reserves,
+              reserves: parseInt(book.reserves),
             };
           })
       );
       setRentalBooks(
         resData.data
-          .filter((b) => parseInt(b.user_id) == userId)
+          .filter(
+            (b) =>
+              parseInt(b.rental_user_id) == userId &&
+              parseInt(b.reserve_user_id) != userId
+          )
           .map((rb, i) => {
-            const rentalBook: RentalBook = {
+            const book: RentalBook = {
               id: rb.id,
               isbn: rb.isbn,
               title: rb.title,
@@ -85,8 +96,28 @@ const Top: React.FC<TopProps> = () => {
               stock: rb.stock,
               dueDate: rb.due_date,
               returnDate: rb.return_date,
+              reserves: parseInt(rb.reserves),
             };
-            return rentalBook;
+            return book;
+          })
+      );
+      setReserveBooks(
+        resData.data
+          .filter((b) => parseInt(b.reserve_user_id) == userId)
+          .map((rb, i) => {
+            const book: ReserveBook = {
+              id: rb.id,
+              isbn: rb.isbn,
+              title: rb.title,
+              author: rb.author,
+              thumbnailUrl: rb.thumbnail_url,
+              publicationDate: rb.publication_date,
+              publisher: rb.publisher,
+              stock: rb.stock,
+              reserveDate: rb.reserve_date,
+              reserves: parseInt(rb.reserves),
+            };
+            return book;
           })
       );
     }
@@ -149,8 +180,18 @@ const Top: React.FC<TopProps> = () => {
       </div>
       <div className={styles.bookListSection}>
         <h2 className={styles.title}>レンタル中の本</h2>
-        <BookList
+        <RentalBookList
           books={rentalBooks}
+          onRentalClick={postRentalBook}
+          onReturnClick={postReturnBook}
+          onReserveClick={postReserveBook}
+          onItemClick={() => {}}
+        />
+      </div>
+      <div className={styles.bookListSection}>
+        <h2 className={styles.title}>予約中の本</h2>
+        <ReserveBookList
+          books={reserveBooks}
           onRentalClick={postRentalBook}
           onReturnClick={postReturnBook}
           onReserveClick={postReserveBook}
