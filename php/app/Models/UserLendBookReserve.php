@@ -77,7 +77,6 @@ class UserLendBookReserve extends Model
   }
   public function extension($user_id, $book_id)
   {
-    // 一週間追加
     // 予約期間中かつ延長済ではない
     $this
       ->where('status = 0')

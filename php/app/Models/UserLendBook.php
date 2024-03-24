@@ -94,7 +94,7 @@ class UserLendBook extends Model
         // とりえあず二週間後
         'due_date' => date("Y-m-d", strtotime("+14 day")),
       ]);
-      $res->disableReserve($user_id, $book_id);
+      $resModel->disableReserve($user_id, $book_id);
 
       $this->db->transComplete();
       $rst = true;
@@ -160,16 +160,24 @@ class UserLendBook extends Model
     $model = new Book();
     $query = $this->db->query(<<<EOT
 select b.*,
-stock - (
-      select count(*) from user_lend_books as ub where ub.book_id = b.id and ub.return_date is null
+b.stock - (
+      select count(*) from user_lend_books as ub2
+      where ub2.book_id = b.id and ub2.return_date is null
 ) as stock,
+(
+      select count(*) from user_lend_books as ub2
+      where ub2.book_id = b.id and ub2.return_date is null
+) as rentals,
+b.stock as bstock,
 (
       select count(*) from user_lend_book_reserves as res
       where res.book_id = b.id and res.status = 0
 ) as reserves,
-return_date, due_date, lend_date, user_id, username
+return_date, due_date, lend_date, ub.user_id as rental_user_id, username,
+res.user_id as reserve_user_id
 from books as b
 left outer join user_lend_books as ub on ub.book_id = b.id and return_date is null
+left outer join user_lend_book_reserves as res on res.book_id = b.id and status <> 1
 left outer join users as u on ub.user_id = u.id
 EOT);
     return $query->getResultArray();
