@@ -1,3 +1,10 @@
+import React from "react";
+
+export interface BookListInfo {
+  contents: React.ReactNode;
+  title: string;
+}
+
 export interface Book {
   id: string;
   isbn: string;
