@@ -40,6 +40,37 @@ const BookListItem: React.FC<BookListItemProps> = ({
     book.publisher.length < 10
       ? book.publisher
       : book.publisher.substring(0, 10) + "...";
+  const dialogChoices = [];
+  if (onReserveClick !== undefined && book.stock <= 0) {
+    dialogChoices.push({
+      onChoice: () => {
+        onReserveClick(book);
+        setIsOpen(false);
+      },
+      choiceLabel: "予約",
+      choiceButtonType: "choice1Button",
+    });
+  }
+  if (onRentalClick !== undefined && book.stock > 0) {
+    dialogChoices.push({
+      onChoice: () => {
+        onRentalClick(book);
+        setIsOpen(false);
+      },
+      choiceLabel: "借りる",
+      choiceButtonType: "choice1Button",
+    });
+  }
+  if (onReturnClick !== undefined) {
+    dialogChoices.push({
+      onChoice: () => {
+        onReturnClick(book);
+        setIsOpen(false);
+      },
+      choiceLabel: "返却",
+      choiceButtonType: "choice2Button",
+    });
+  }
   return (
     <div>
       <LinkLikeButton onClick={handleClick} isSimple={true}>
@@ -51,7 +82,7 @@ const BookListItem: React.FC<BookListItemProps> = ({
             <p className={styles.publisher}>Publisher: {sPublisher}</p>
             <p className={styles.stock}>レンタル可能蔵書数: {book.stock}</p>
             <p className={styles.reserves}>
-              予約{book.reserves && book.reserves > 0 ? "有" : "無"}
+              予約状況: 予約{book.reserves && book.reserves > 0 ? "有" : "無"}
             </p>
             <p className={styles.date}>
               Published:{" "}
@@ -61,58 +92,15 @@ const BookListItem: React.FC<BookListItemProps> = ({
           </div>
         </div>
       </LinkLikeButton>
-      {onRentalClick === undefined ? (
-        <ChoiceDialog
-          isOpen={isOpen}
-          onClose={(e) => {
-            e.preventDefault();
-            setIsOpen(false);
-          }}
-          choices={[
-            {
-              onChoice: () => {
-                onReturnClick(book);
-                setIsOpen(false);
-              },
-              choiceLabel: "返却",
-              choiceButtonType: "choice2Button",
-            },
-          ]}
-          message={book.title}
-        />
-      ) : (
-        <ChoiceDialog
-          isOpen={isOpen}
-          onClose={(e) => {
-            e.preventDefault();
-            setIsOpen(false);
-          }}
-          choices={
-            book.stock > 0
-              ? [
-                  {
-                    onChoice: () => {
-                      onRentalClick(book);
-                      setIsOpen(false);
-                    },
-                    choiceLabel: "借りる",
-                    choiceButtonType: "choice1Button",
-                  },
-                ]
-              : [
-                  {
-                    onChoice: () => {
-                      onReserveClick(book);
-                      setIsOpen(false);
-                    },
-                    choiceLabel: "予約",
-                    choiceButtonType: "choice1Button",
-                  },
-                ]
-          }
-          message={book.title}
-        />
-      )}
+      <ChoiceDialog
+        isOpen={isOpen}
+        onClose={(e) => {
+          e.preventDefault();
+          setIsOpen(false);
+        }}
+        choices={dialogChoices}
+        message={book.title}
+      />
     </div>
   );
 };
